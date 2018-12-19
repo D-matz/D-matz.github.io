@@ -6,12 +6,14 @@
 $(document).ready(function(){
   $("button").click(function(){
     var name = document.getElementById("input").value;
+    var key = "RGAPI-6817416a-cd5c-4e62-aabc-294baa7d8b81";
   $.ajax({
-      url: "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/"+name+"?api_key=RGAPI-26846843-1c02-42cb-a4ab-d648231991f7",
+      url: "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/"+name+"?api_key="+key,
       headers: {
         'Access-Control-Allow-Origin':'*',
         'Access-Control-Allow-Methods': 'GET',
-        'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
+        'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
+        'Access-Control-Allow-Credentials': 'true'
       },
       type: "GET",
       dataType: "json",
