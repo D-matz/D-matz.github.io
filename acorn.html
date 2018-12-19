@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+function getCORS(url, success) {
+    var xhr = new XMLHttpRequest();
+    if (!('withCredentials' in xhr)) xhr = new XDomainRequest(); // fix IE8/9
+    xhr.open('GET', url);
+    xhr.onload = success;
+    xhr.send();
+    return xhr;
+}
+
+// example request
+getCORS('https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/imaqtpie?api_key=RGAPI-6817416a-cd5c-4e62-aabc-294baa7d8b81', function(request){
+    var response = request.currentTarget.response || request.target.responseText;
+    console.log(response);
+    document.getElementById("one").innerHTML = "result: "+response;
+});
+
+
+</script>
+</head>
+<body>
+  <div id="one"></div>
+</body>
+</html>
