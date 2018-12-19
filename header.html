@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("button").click(function(){
+    var name = document.getElementById("input").value;
+    $.get("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/"+name+"?api_key=RGAPI-26846843-1c02-42cb-a4ab-d648231991f7", function(data, status){
+        document.getElementById("one").innerHTML = "result: "+data.id;
+        document.getElementById("two").innerHTML = "result: "+data.name;
+    });
+  });
+});
+</script>
+</head>
+<body>
+<input type="text" id="input" value="">
+<br>
+<button>get summoner info</button>
+<div id="one"></div>
+<div id="two"></div>
+</body>
+</html>
