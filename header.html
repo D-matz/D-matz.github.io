@@ -9,10 +9,9 @@ $(document).ready(function(){
   $.ajax({
       url: "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/"+name+"?api_key=RGAPI-26846843-1c02-42cb-a4ab-d648231991f7",
       headers: {
-      //    'Content-Type': 'application/x-www-form-urlencoded'
       'Access-Control-Allow-Credentials': 'true'
       },
-      type: "GET", /* or type:"GET" or type:"PUT" */
+      type: "GET",
       dataType: "json",
       data: {
       },
