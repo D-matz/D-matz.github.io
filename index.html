@@ -13,25 +13,247 @@
 	body, html {
 		margin: 0;
 		padding: 0;
+		background-color: #ffffff;
 	}
+	
 	#nav a {
 		font-size: 30px;
-	  color: inherit;
+	  text-decoration: none;
 	}
 
 	#nav a:hover {
 	  box-shadow: 0 0 8px red;
 	  transition: all 0.2s ease-in-out;
 	}
+	
+	svg {
+	  cursor: grab;
+	}
+
+	svg:active {
+	  cursor: grabbing;
+	}
+	
+	:root {
+  --bg-color-light: #f0f0e8;
+  --bg-color-dark: #1c2135;
+  --border-color-light: #1c2135;
+  --border-color-dark: #f0f0e8;
+  --sun-color: #fabc1c;
+  --moon-color: #fffdf2;
+  --day-bg-color: #0dbdf6;
+  --night-bg-color: #272a30;
+  --cloud-color: #fffdf2;
+  --star-color: #fffdf2;
+  --ocean-color-light: #A8D0E6;
+  --ocean-color-dark: #A8D0E6;
+  --country-one-light: #F4C7C3;
+  --country-two-light: #C3E8BD;
+  --country-three-light: #F9F5C7;
+  --country-four-light: #D7C3E8;
+}
+
+body {
+  background-color: var(--bg-color-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  transition: background-color 0.8s ease;
+}
+
+.theme-switcher-grid {
+  display: grid;
+  grid-template-columns: repeat(54, 1px);
+  grid-template-rows: repeat(24, 1px);
+  gap: 0;
+  position: relative;
+  background-color: var(--day-bg-color);
+  border-radius: 49px;
+  border: 1px solid var(--border-color-light);
+  cursor: pointer;
+  transition: background-color 0.8s ease, border-color 0.8s ease;
+  appearance: none;
+  padding: 0;
+}
+
+.theme-switcher-grid.night-theme {
+  background-color: var(--night-bg-color);
+  border-color: var(--border-color-dark);
+}
+
+.sun {
+  background-color: var(--sun-color);
+  grid-column: 3 / 23;
+  grid-row: 3 / 23;
+  border-radius: 50%;
+  transition: grid-column 0.8s ease, background-color 0.8s ease;
+  height: 20px;
+}
+
+.theme-switcher-grid.night-theme .sun {
+  grid-column: 33 / 53;
+  background-color: var(--moon-color);
+}
+
+.moon-overlay {
+  position: absolute;
+  border-radius: 50%;
+  transition: left 0.8s ease, background-color 0.8s ease;
+  z-index: 1;
+  background-color: var(--day-bg-color);
+}
+
+.theme-switcher-grid.night-theme .moon-overlay {
+  display: block;
+  left: calc(28 / 54 * 100%);
+  top: calc(4 / 29 * 100%);
+  width: 18px;
+  height: 18px;
+  background-color: var(--night-bg-color);
+}
+
+.cloud-ball {
+  background-color: var(--cloud-color);
+  border-radius: 50%;
+  width: 9px;
+  height: 9px;
+  position: absolute;
+  transition: all 0.8s ease;
+  z-index: 2;
+}
+
+#ball1 {
+  top: calc((8 / 24) * 100%);
+  left: calc((12 / 54) * 100%);
+}
+
+#ball2 {
+  top: calc((8 / 24) * 100%);
+  left: calc((17 / 54) * 100%);
+}
+
+#ball3 {
+  top: calc((8 / 24) * 100%);
+  left: calc((22 / 54) * 100%);
+}
+
+#ball4 {
+  top: calc((6 / 24) * 100%);
+  left: calc((17 / 54) * 100%);
+}
+
+.theme-switcher-grid.night-theme #ball1 {
+  top: calc((16 / 24) * 100%);
+  left: calc((16 / 54) * 100%);
+  width: 2px;
+  height: 2px;
+}
+
+.theme-switcher-grid.night-theme #ball2 {
+  top: calc((3 / 24) * 100%);
+  left: calc((22 / 54) * 100%);
+  width: 2px;
+  height: 2px;
+}
+
+.theme-switcher-grid.night-theme #ball3 {
+  top: calc((10 / 24) * 100%);
+  left: calc((29 / 54) * 100%);
+  width: 2px;
+  height: 2px;
+}
+
+.theme-switcher-grid.night-theme #ball4 {
+  top: calc((5 / 24) * 100%);
+  left: calc((34 / 54) * 100%);
+  width: 2px;
+  height: 2px;
+}
+
+.star {
+  background-color: var(--star-color);
+  width: 1px;
+  height: 1px;
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+#star1 {
+  top: calc((7 / 24) * 100%);
+  left: calc((10 / 54) * 100%);
+  border-radius: 50%;
+}
+
+#star2 {
+  top: calc((9 / 24) * 100%);
+  left: calc((16 / 54) * 100%);
+  border-radius: 50%;
+}
+
+#star3 {
+  top: calc((13 / 24) * 100%);
+  left: calc((23 / 54) * 100%);
+  border-radius: 50%;
+}
+
+#star4 {
+  top: calc((18 / 24) * 100%);
+  left: calc((29 / 54) * 100%);
+  border-radius: 50%;
+}
+
+.theme-switcher-grid.night-theme #star1,
+.theme-switcher-grid.night-theme #star2,
+.theme-switcher-grid.night-theme #star3,
+.theme-switcher-grid.night-theme #star4 {
+  opacity: 1;
+}
 </style>
 </head>
 <body> 
-    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #0a0a0a">
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
 		<div style="display: flex-column">
-		<div id="nav">
+		<div id="nav" style="display: flex">
 			<a title="globe" href="#">🌎</a>
 			<a title="map" href="#">🗺️</a>
 			<a title="list" href="#">📄</a>
+			<!--cute dark mode toggle from https://www.reddit.com/r/webdev/comments/1e62ecx/darklight_theme_switcher_button/ https://github.com/dottereldesign/react_theme-switcher -->
+			<button
+			style="margin-left: auto; height: 25px";
+			class="theme-switcher-grid"
+			id="theme-switcher-grid"
+			aria-label="Switch theme"
+		  >
+			<div class="sun" id="sun" aria-hidden="true"></div>
+			<div class="moon-overlay" id="moon-overlay" aria-hidden="true"></div>
+			<div
+			  class="cloud-ball cloud-ball-left"
+			  id="ball1"
+			  aria-hidden="true"
+			></div>
+			<div
+			  class="cloud-ball cloud-ball-middle"
+			  id="ball2"
+			  aria-hidden="true"
+			></div>
+			<div
+			  class="cloud-ball cloud-ball-right"
+			  id="ball3"
+			  aria-hidden="true"
+			></div>
+			<div
+			  class="cloud-ball cloud-ball-top"
+			  id="ball4"
+			  aria-hidden="true"
+			></div>
+			<div class="star" id="star1" aria-hidden="true"></div>
+			<div class="star" id="star2" aria-hidden="true"></div>
+			<div class="star" id="star3" aria-hidden="true"></div>
+			<div class="star" id="star4" aria-hidden="true"></div>
+		  </button>
 		</div>
         <svg style="width: min(90vh, 90vw); height: min(90vh, 90vw);"> 
         </svg>
@@ -62,11 +284,11 @@
         const path = d3.geoPath().projection(projection);
 		
 		// Add ocean background
-        svg.append("circle")
+        const ocean = svg.append("circle")
             .attr("cx", width / 2)
             .attr("cy", height / 2)
             .attr("r", size * 0.5)
-            .attr("fill", "#4A90E2")
+            .attr("fill", "var(--ocean-color-light)")
         
         // Add drag behavior
         const drag = d3.drag()
@@ -98,8 +320,7 @@
             .style("opacity", 0);
         
         // Loading data from json
-        d3.json("https://raw.githubusercontent.com/"
-            +"epistler999/GeoLocation/master/world.json", 
+        d3.json("/world_colored.json", 
             function (data) { 
                 // Draw the map 
                 svg.append("g") 
@@ -133,6 +354,7 @@
 			.on("zoom", function () {
 				const newScale = d3.event.transform.k;
 				projection.scale(newScale);
+				ocean.attr("r", newScale);
 				svg.selectAll("path").attr("d", path);
 			});
 
@@ -162,6 +384,16 @@
 
 		// Add resize event listener
 		window.addEventListener('resize', updateScale);
+		
+		
+			document
+	  .getElementById("theme-switcher-grid")
+	  .addEventListener("click", function () {
+		this.classList.toggle("night-theme");
+		document.body.style.backgroundColor = this.classList.contains("night-theme")
+		  ? "var(--bg-color-dark)"
+		  : "var(--bg-color-light)";
+	  });
     </script> 
 </body>
   
