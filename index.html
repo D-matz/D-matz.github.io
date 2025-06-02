@@ -45,12 +45,15 @@
   --night-bg-color: #272a30;
   --cloud-color: #fffdf2;
   --star-color: #fffdf2;
-  --ocean-color-light: #A8D0E6;
-  --ocean-color-dark: #A8D0E6;
-  --country-one-light: #F4C7C3;
-  --country-two-light: #C3E8BD;
-  --country-three-light: #F9F5C7;
-  --country-four-light: #D7C3E8;
+--ocean-color-light: #A6D7F0;
+--ocean-color-dark: #023E58;
+--country-one: #EF476F;
+--country-two: #06D6A0;
+--country-three: #FFD166;
+--country-four: #8338EC;
+
+
+
 }
 
 body {
@@ -289,6 +292,7 @@ body {
             .attr("cy", height / 2)
             .attr("r", size * 0.5)
             .attr("fill", "var(--ocean-color-light)")
+			.attr("style", "transition: fill 0.8s ease;")
         
         // Add drag behavior
         const drag = d3.drag()
@@ -320,18 +324,20 @@ body {
             .style("opacity", 0);
         
         // Loading data from json
-        d3.json("/world_colored.json", 
+        d3.json("/colored_world.json", 
             function (data) { 
                 // Draw the map 
                 svg.append("g") 
                     .selectAll("path") 
                     .data(data.features) 
                     .enter().append("path") 
-                    .attr("fill", "grey") 
+                    .attr("fill", d => {
+					  const c = d.properties.color;
+					  return `var(--country-${['one','two','three','four'][c-1]})`;
+					})
                     .attr("d", d3.geoPath() 
                         .projection(projection) 
-                    ) 
-                    .style("stroke", "#ffff")
+                    )
                     .on("mouseover", function(d) {
                         tooltip.style("opacity", 1)
                             .html(`<img src="https://flagcdn.com/16x12/${d.id.toLowerCase()}.png" onerror="this.style.display='none'"> ${d.properties.name}`)
@@ -369,7 +375,7 @@ body {
 			   .attr("height", newSize);
 			
 			// Update projection with new scale and translate
-			projection.scale(newSize * 0.4)
+			projection.scale(newSize * 0.5)
 					  .translate([newSize / 2, newSize / 2]);
 			
 			// Redraw all paths with updated projection
@@ -379,7 +385,7 @@ body {
 			svg.selectAll("circle")
 			   .attr("cx", newSize / 2)
 			   .attr("cy", newSize / 2)
-			   .attr("r", newSize * 0.4);
+			   .attr("r", newSize * 0.5);
 		}
 
 		// Add resize event listener
@@ -390,9 +396,16 @@ body {
 	  .getElementById("theme-switcher-grid")
 	  .addEventListener("click", function () {
 		this.classList.toggle("night-theme");
-		document.body.style.backgroundColor = this.classList.contains("night-theme")
-		  ? "var(--bg-color-dark)"
-		  : "var(--bg-color-light)";
+		if(this.classList.contains("night-theme"))
+		{
+			document.body.style.backgroundColor = "var(--bg-color-dark)";
+			ocean.attr("fill", "var(--ocean-color-dark)");
+		}
+		else
+		{
+			document.body.style.backgroundColor = "var(--bg-color-light)";
+			ocean.attr("fill", "var(--ocean-color-light)");
+		}
 	  });
     </script> 
 </body>
