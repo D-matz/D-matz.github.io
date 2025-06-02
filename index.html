@@ -1,0 +1,94 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+  
+<head> 
+    <meta charset="UTF-8" /> 
+    <meta name="viewport" content=
+        "width=device-width,initial-scale=1.0" /> 
+    <script src="https://d3js.org/d3.v4.js"></script> 
+    <script src=
+"https://d3js.org/d3-geo-projection.v2.min.js">
+    </script>  
+</head> 
+<body> 
+    <div> 
+        <svg width="1200" height="850"> 
+        </svg> 
+    </div> 
+  
+    <script> 
+        var svg = d3.select("svg"), 
+            width = +svg.attr("width"), 
+            height = +svg.attr("height"); 
+        const config = {
+            speed: 0.010,
+            verticalTilted: -10,
+            horizontalTilted: 0
+        }
+        // The orthographic Earth projection 
+        // Center(0,0) and no rotation 
+        var projection = d3.geoOrthographic()
+            .center([0, 0]) 
+            .scale(250)
+            .clipAngle(90 )
+            .translate([width / 2, height / 3]) 
+            .rotate([0,0])
+    
+        const path = d3.geoPath().projection(projection);
+        
+        // Add drag behavior
+        const drag = d3.drag()
+            .on("drag", function() {
+                const rotate = projection.rotate();
+                const k = 75 / projection.scale();
+                projection.rotate([
+                    rotate[0] + d3.event.dx * k,
+                    rotate[1] - d3.event.dy * k
+                ]);
+                svg.selectAll("path").attr("d", path);
+            });
+        
+        svg.call(drag);
+        
+        // Create tooltip
+        const tooltip = d3.select("body").append("div")
+            .style("position", "absolute")
+            .style("background", "rgba(0,0,0,0.8)")
+            .style("color", "white")
+            .style("padding", "5px")
+            .style("border-radius", "3px")
+            .style("pointer-events", "none")
+            .style("opacity", 0);
+        
+        // Loading data from json
+        d3.json("https://raw.githubusercontent.com/"
+            +"epistler999/GeoLocation/master/world.json", 
+            function (data) { 
+                // Draw the map 
+                svg.append("g") 
+                    .selectAll("path") 
+                    .data(data.features) 
+                    .enter().append("path") 
+                    .attr("fill", "grey") 
+                    .attr("d", d3.geoPath() 
+                        .projection(projection) 
+                    ) 
+                    .style("stroke", "#ffff")
+                    .on("mouseover", function(d) {
+                        tooltip.style("opacity", 1)
+                            .html(`<img src="https://flagcdn.com/16x12/${d.id.toLowerCase()}.png" onerror="this.style.display='none'"> ${d.properties.name}`)
+                            .style("left", (d3.event.pageX + 10) + "px")
+                            .style("top", (d3.event.pageY - 10) + "px");
+                    })
+                    .on("mouseout", function() {
+                        tooltip.style("opacity", 0);
+                    })
+                    .on("mousemove", function() {
+                        tooltip.style("left", (d3.event.pageX + 10) + "px")
+                            .style("top", (d3.event.pageY - 10) + "px");
+                    }) 
+        }) 
+    </script> 
+</body>
+  
+</html>
