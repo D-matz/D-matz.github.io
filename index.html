@@ -8,18 +8,30 @@
     <script src="https://d3js.org/d3.v4.js"></script> 
     <script src=
 "https://d3js.org/d3-geo-projection.v2.min.js">
-    </script>  
-</head> 
+    </script>
+	<style>
+	body, html {
+		margin: 0;
+		padding: 0;
+	}
+	svg {
+    width: min(90vh, 90vw);
+    height: min(90vh, 90vw);
+}</style>
+</head>
 <body> 
-    <div> 
-        <svg width="1200" height="850"> 
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #0a0a0a"> 
+        <svg> 
         </svg> 
     </div> 
   
     <script> 
-        var svg = d3.select("svg"), 
-            width = +svg.attr("width"), 
-            height = +svg.attr("height"); 
+		const size = Math.min(window.innerHeight * 0.9, window.innerWidth * 0.9);
+		var svg = d3.select("svg")
+			.attr("width", size)
+			.attr("height", size);
+		const width = size;
+		const height = size;
         const config = {
             speed: 0.010,
             verticalTilted: -10,
@@ -29,23 +41,28 @@
         // Center(0,0) and no rotation 
         var projection = d3.geoOrthographic()
             .center([0, 0]) 
-            .scale(250)
+            .scale(size * 0.5)
             .clipAngle(90 )
-            .translate([width / 2, height / 3]) 
+            .translate([width / 2, height / 2]) 
             .rotate([0,0])
     
         const path = d3.geoPath().projection(projection);
         
         // Add drag behavior
         const drag = d3.drag()
+            .on("start", function() {
+                d3.select(this).style("pointer-events", "none");
+            })
             .on("drag", function() {
                 const rotate = projection.rotate();
                 const k = 75 / projection.scale();
-                projection.rotate([
-                    rotate[0] + d3.event.dx * k,
-                    rotate[1] - d3.event.dy * k
-                ]);
+                const yaw = rotate[0] + d3.event.dx * k * Math.cos(rotate[1] * Math.PI / 180);
+                const pitch = rotate[1] - d3.event.dy * k;
+                projection.rotate([yaw, pitch]);
                 svg.selectAll("path").attr("d", path);
+            })
+            .on("end", function() {
+                d3.select(this).style("pointer-events", "auto");
             });
         
         svg.call(drag);
@@ -87,7 +104,44 @@
                         tooltip.style("left", (d3.event.pageX + 10) + "px")
                             .style("top", (d3.event.pageY - 10) + "px");
                     }) 
-        }) 
+        })
+		
+		// Zoom behavior for scroll wheel zooming
+		const initialScale = projection.scale();
+		const zoom = d3.zoom()
+			.scaleExtent([initialScale * 0.5, initialScale * 4])
+			.on("zoom", function () {
+				const newScale = d3.event.transform.k;
+				projection.scale(newScale);
+				svg.selectAll("path").attr("d", path);
+			});
+
+		svg.call(zoom).call(zoom.transform, d3.zoomIdentity.scale(initialScale));
+
+		
+		function updateScale() {
+			const newSize = Math.min(window.innerHeight * 0.9, window.innerWidth * 0.9);
+			
+			// Update SVG dimensions
+			svg.attr("width", newSize)
+			   .attr("height", newSize);
+			
+			// Update projection with new scale and translate
+			projection.scale(newSize * 0.4)
+					  .translate([newSize / 2, newSize / 2]);
+			
+			// Redraw all paths with updated projection
+			svg.selectAll("path").attr("d", path);
+			
+			// Update any other elements that depend on size (circles, etc.)
+			svg.selectAll("circle")
+			   .attr("cx", newSize / 2)
+			   .attr("cy", newSize / 2)
+			   .attr("r", newSize * 0.4);
+		}
+
+		// Add resize event listener
+		window.addEventListener('resize', updateScale);
     </script> 
 </body>
   
