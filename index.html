@@ -14,15 +14,28 @@
 		margin: 0;
 		padding: 0;
 	}
-	svg {
-    width: min(90vh, 90vw);
-    height: min(90vh, 90vw);
-}</style>
+	#nav a {
+		font-size: 30px;
+	  color: inherit;
+	}
+
+	#nav a:hover {
+	  box-shadow: 0 0 8px red;
+	  transition: all 0.2s ease-in-out;
+	}
+</style>
 </head>
 <body> 
-    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #0a0a0a"> 
-        <svg> 
-        </svg> 
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #0a0a0a">
+		<div style="display: flex-column">
+		<div id="nav">
+			<a title="globe" href="#">🌎</a>
+			<a title="map" href="#">🗺️</a>
+			<a title="list" href="#">📄</a>
+		</div>
+        <svg style="width: min(90vh, 90vw); height: min(90vh, 90vw);"> 
+        </svg>
+		</div>
     </div> 
   
     <script> 
@@ -47,6 +60,13 @@
             .rotate([0,0])
     
         const path = d3.geoPath().projection(projection);
+		
+		// Add ocean background
+        svg.append("circle")
+            .attr("cx", width / 2)
+            .attr("cy", height / 2)
+            .attr("r", size * 0.5)
+            .attr("fill", "#4A90E2")
         
         // Add drag behavior
         const drag = d3.drag()
