@@ -343,7 +343,6 @@ body {
 					.on("click", function(d) {
 						if (pinnedCountry === d) {
 							// Clicking same country - unpin
-							pinnedCountry = null;
 							hideTooltip();
 						} else {
 							// Pin new country
@@ -426,8 +425,7 @@ body {
 	  
 		document.addEventListener("click", function (event) {
 		  const isInsideSVG = svg.node().contains(event.target);
-		  const isInsideTooltip = tooltip.node().contains(event.target);
-		  if (!isInsideSVG && !isInsideTooltip && pinnedCountry) {
+		  if (!isInsideSVG) {
 			hideTooltip();
 		  }
 		});
