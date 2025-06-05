@@ -1,61 +1,228 @@
 <!DOCTYPE html> 
 <html lang="en"> 
-  
 <head> 
-    <meta charset="UTF-8" /> 
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 	<title>Eat The World</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3e%3cdefs%3e%3clinearGradient%20id='blue-gradient'%20x1='0%25'%20y1='0%25'%20x2='100%25'%20y2='100%25'%3e%3cstop%20offset='0%25'%20stop-color='%23A6D7F0'/%3e%3cstop%20offset='100%25'%20stop-color='%23023E58'/%3e%3c/linearGradient%3e%3c/defs%3e%3ccircle%20cx='50'%20cy='50'%20r='50'%20fill='url(%23blue-gradient)'/%3e%3c/svg%3e" type="image/svg+xml" />
     <script src="https://d3js.org/d3.v4.js"></script> 
     <script src=
 "https://d3js.org/d3-geo-projection.v2.min.js">
     </script>
 	<link rel="stylesheet" href="style.css">
-	<style>
-
-	
-	</style>
+	<script src="common_loadtheme.js"></script>
+    <style>        
+        .item {
+            width: 400px;
+            display: flex;
+			gap: 5px;
+        }
+    </style>
 </head>
-<body> 
-<div id="nav" style="display: flex; align-items: center; padding: 10px;">
-  <a title="globe" href="/globe.html">🌎</a>
-  <a title="map" href="/map.html">🗺️</a>
-  <a title="list" href="/list.html">📄</a>
-  <button
-    style="margin-left: 10px; height: 25px;"
-    class="theme-switcher-grid"
-    id="theme-switcher-grid"
-    aria-label="Switch theme"
-  >
-    <div class="sun" id="sun" aria-hidden="true"></div>
-    <div class="moon-overlay" id="moon-overlay" aria-hidden="true"></div>
-    <div class="cloud-ball cloud-ball-left" id="ball1" aria-hidden="true"></div>
-    <div class="cloud-ball cloud-ball-middle" id="ball2" aria-hidden="true"></div>
-    <div class="cloud-ball cloud-ball-right" id="ball3" aria-hidden="true"></div>
-    <div class="cloud-ball cloud-ball-top" id="ball4" aria-hidden="true"></div>
-    <div class="star" id="star1" aria-hidden="true"></div>
-    <div class="star" id="star2" aria-hidden="true"></div>
-    <div class="star" id="star3" aria-hidden="true"></div>
-    <div class="star" id="star4" aria-hidden="true"></div>
-  </button>
-</div>
+<body>
+  <div id="nav" style="display: flex; justify-content: center; align-items: center; padding: 10px;">
+    <a title="globe" href="/globe.html">🌎</a>
+    <a title="map" href="/map.html">🗺️</a>
+    <a title="list" href="/list.html">📄</a>
+    <button onclick="toggleTheme()"
+      style="margin-left: 10px; height: 25px;"
+      class="theme-switcher-grid"
+      id="theme-switcher-grid"
+      aria-label="Switch theme"
+    >
+      <div class="sun" id="sun" aria-hidden="true"></div>
+      <div class="moon-overlay" id="moon-overlay" aria-hidden="true"></div>
+      <div class="cloud-ball cloud-ball-left" id="ball1" aria-hidden="true"></div>
+      <div class="cloud-ball cloud-ball-middle" id="ball2" aria-hidden="true"></div>
+      <div class="cloud-ball cloud-ball-right" id="ball3" aria-hidden="true"></div>
+      <div class="cloud-ball cloud-ball-top" id="ball4" aria-hidden="true"></div>
+      <div class="star" id="star1" aria-hidden="true"></div>
+      <div class="star" id="star2" aria-hidden="true"></div>
+      <div class="star" id="star3" aria-hidden="true"></div>
+      <div class="star" id="star4" aria-hidden="true"></div>
+    </button>
+  </div>
 
-<table><tr><td>Afghanistan</td><td></td></tr><tr><td>Angola</td><td></td></tr><tr><td>Albania</td><td></td></tr><tr><td>United Arab Emirates</td><td></td></tr><tr><td>Argentina</td><td></td></tr><tr><td>Armenia</td><td></td></tr><tr><td>Antarctica</td><td></td></tr><tr><td>French Southern and Antarctic Lands</td><td></td></tr><tr><td>Australia</td><td></td></tr><tr><td>Austria</td><td></td></tr><tr><td>Azerbaijan</td><td></td></tr><tr><td>Burundi</td><td></td></tr><tr><td>Belgium</td><td></td></tr><tr><td>Benin</td><td></td></tr><tr><td>Burkina Faso</td><td></td></tr><tr><td>Bangladesh</td><td></td></tr><tr><td>Bulgaria</td><td></td></tr><tr><td>The Bahamas</td><td></td></tr><tr><td>Bosnia and Herzegovina</td><td></td></tr><tr><td>Belarus</td><td></td></tr><tr><td>Belize</td><td></td></tr><tr><td>Bolivia</td><td></td></tr><tr><td>Brazil</td><td></td></tr><tr><td>Brunei</td><td></td></tr><tr><td>Bhutan</td><td></td></tr><tr><td>Botswana</td><td></td></tr><tr><td>Central African Republic</td><td></td></tr><tr><td>Canada</td><td></td></tr><tr><td>Switzerland</td><td></td></tr><tr><td>Chile</td><td></td></tr><tr><td>China</td><td></td></tr><tr><td>Ivory Coast</td><td></td></tr><tr><td>Cameroon</td><td></td></tr><tr><td>Democratic Republic of the Congo</td><td></td></tr><tr><td>Republic of the Congo</td><td></td></tr><tr><td>Colombia</td><td></td></tr><tr><td>Costa Rica</td><td></td></tr><tr><td>Cuba</td><td></td></tr><tr><td>Northern Cyprus</td><td></td></tr><tr><td>Cyprus</td><td></td></tr><tr><td>Czech Republic</td><td></td></tr><tr><td>Germany</td><td></td></tr><tr><td>Djibouti</td><td></td></tr><tr><td>Denmark</td><td></td></tr><tr><td>Dominican Republic</td><td></td></tr><tr><td>Algeria</td><td></td></tr><tr><td>Ecuador</td><td></td></tr><tr><td>Egypt</td><td></td></tr><tr><td>Eritrea</td><td></td></tr><tr><td>Spain</td><td></td></tr><tr><td>Estonia</td><td></td></tr><tr><td>Ethiopia</td><td></td></tr><tr><td>Finland</td><td></td></tr><tr><td>Fiji</td><td></td></tr><tr><td>Falkland Islands</td><td></td></tr><tr><td>France</td><td></td></tr><tr><td>Gabon</td><td></td></tr><tr><td>England</td><td></td></tr><tr><td>Georgia</td><td></td></tr><tr><td>Ghana</td><td></td></tr><tr><td>Guinea</td><td></td></tr><tr><td>Gambia</td><td></td></tr><tr><td>Guinea Bissau</td><td></td></tr><tr><td>Equatorial Guinea</td><td></td></tr><tr><td>Greece</td><td></td></tr><tr><td>Greenland</td><td></td></tr><tr><td>Guatemala</td><td></td></tr><tr><td>Guyana</td><td></td></tr><tr><td>Honduras</td><td></td></tr><tr><td>Croatia</td><td></td></tr><tr><td>Haiti</td><td></td></tr><tr><td>Hungary</td><td></td></tr><tr><td>Indonesia</td><td></td></tr><tr><td>India</td><td></td></tr><tr><td>Ireland</td><td></td></tr><tr><td>Iran</td><td></td></tr><tr><td>Iraq</td><td></td></tr><tr><td>Iceland</td><td></td></tr><tr><td>Israel</td><td></td></tr><tr><td>Italy</td><td></td></tr><tr><td>Jamaica</td><td></td></tr><tr><td>Jordan</td><td></td></tr><tr><td>Japan</td><td></td></tr><tr><td>Kazakhstan</td><td></td></tr><tr><td>Kenya</td><td></td></tr><tr><td>Kyrgyzstan</td><td></td></tr><tr><td>Cambodia</td><td></td></tr><tr><td>South Korea</td><td><a href='https://www.maangchi.com/'>https://www.maangchi.com/</a></td></tr><tr><td>Kosovo</td><td></td></tr><tr><td>Kuwait</td><td></td></tr><tr><td>Laos</td><td></td></tr><tr><td>Lebanon</td><td></td></tr><tr><td>Liberia</td><td></td></tr><tr><td>Libya</td><td></td></tr><tr><td>Sri Lanka</td><td></td></tr><tr><td>Lesotho</td><td></td></tr><tr><td>Lithuania</td><td></td></tr><tr><td>Luxembourg</td><td></td></tr><tr><td>Latvia</td><td></td></tr><tr><td>Morocco</td><td></td></tr><tr><td>Moldova</td><td></td></tr><tr><td>Madagascar</td><td></td></tr><tr><td>Mexico</td><td></td></tr><tr><td>Macedonia</td><td></td></tr><tr><td>Mali</td><td></td></tr><tr><td>Myanmar</td><td></td></tr><tr><td>Montenegro</td><td></td></tr><tr><td>Mongolia</td><td></td></tr><tr><td>Mozambique</td><td></td></tr><tr><td>Mauritania</td><td></td></tr><tr><td>Malawi</td><td></td></tr><tr><td>Malaysia</td><td></td></tr><tr><td>Namibia</td><td></td></tr><tr><td>New Caledonia</td><td></td></tr><tr><td>Niger</td><td></td></tr><tr><td>Nigeria</td><td></td></tr><tr><td>Nicaragua</td><td></td></tr><tr><td>Netherlands</td><td></td></tr><tr><td>Norway</td><td></td></tr><tr><td>Nepal</td><td></td></tr><tr><td>New Zealand</td><td></td></tr><tr><td>Oman</td><td></td></tr><tr><td>Pakistan</td><td></td></tr><tr><td>Panama</td><td></td></tr><tr><td>Peru</td><td></td></tr><tr><td>Philippines</td><td></td></tr><tr><td>Papua New Guinea</td><td></td></tr><tr><td>Poland</td><td></td></tr><tr><td>Puerto Rico</td><td></td></tr><tr><td>North Korea</td><td></td></tr><tr><td>Portugal</td><td></td></tr><tr><td>Paraguay</td><td></td></tr><tr><td>Qatar</td><td></td></tr><tr><td>Romania</td><td></td></tr><tr><td>Russia</td><td></td></tr><tr><td>Rwanda</td><td></td></tr><tr><td>Western Sahara</td><td></td></tr><tr><td>Saudi Arabia</td><td></td></tr><tr><td>Sudan</td><td></td></tr><tr><td>South Sudan</td><td></td></tr><tr><td>Senegal</td><td></td></tr><tr><td>Solomon Islands</td><td></td></tr><tr><td>Sierra Leone</td><td></td></tr><tr><td>El Salvador</td><td></td></tr><tr><td>Somaliland</td><td></td></tr><tr><td>Somalia</td><td></td></tr><tr><td>Republic of Serbia</td><td></td></tr><tr><td>Suriname</td><td></td></tr><tr><td>Slovakia</td><td></td></tr><tr><td>Slovenia</td><td></td></tr><tr><td>Sweden</td><td></td></tr><tr><td>Swaziland</td><td></td></tr><tr><td>Syria</td><td></td></tr><tr><td>Chad</td><td></td></tr><tr><td>Togo</td><td></td></tr><tr><td>Thailand</td><td></td></tr><tr><td>Tajikistan</td><td></td></tr><tr><td>Turkmenistan</td><td></td></tr><tr><td>East Timor</td><td></td></tr><tr><td>Trinidad and Tobago</td><td></td></tr><tr><td>Tunisia</td><td></td></tr><tr><td>Turkey</td><td></td></tr><tr><td>Taiwan</td><td></td></tr><tr><td>United Republic of Tanzania</td><td></td></tr><tr><td>Uganda</td><td></td></tr><tr><td>Ukraine</td><td></td></tr><tr><td>Uruguay</td><td></td></tr><tr><td>USA</td><td></td></tr><tr><td>Uzbekistan</td><td></td></tr><tr><td>Venezuela</td><td></td></tr><tr><td>Vietnam</td><td></td></tr><tr><td>Vanuatu</td><td></td></tr><tr><td>West Bank</td><td></td></tr><tr><td>Yemen</td><td></td></tr><tr><td>South Africa</td><td></td></tr><tr><td>Zambia</td><td></td></tr><tr><td>Zimbabwe</td><td></td></tr></table>
-
+	<script src="common_tooltip.js"></script>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2px;">
+		<div class="item"><div class="name">Afghanistan</div></div>
+		<div class="item"><div class="name">Albania</div></div>
+		<div class="item"><div class="name">Algeria</div></div>
+		<div class="item"><div class="name">Angola</div></div>
+		<div class="item"><div class="name">Antarctica</div></div>
+		<div class="item"><div class="name">Argentina</div></div>
+		<div class="item"><div class="name">Armenia</div></div>
+		<div class="item"><div class="name">Australia</div></div>
+		<div class="item"><div class="name">Austria</div></div>
+		<div class="item"><div class="name">Azerbaijan</div></div>
+		<div class="item"><div class="name">Bangladesh</div></div>
+		<div class="item"><div class="name">Belarus</div></div>
+		<div class="item"><div class="name">Belgium</div></div>
+		<div class="item"><div class="name">Belize</div></div>
+		<div class="item"><div class="name">Benin</div></div>
+		<div class="item"><div class="name">Bhutan</div></div>
+		<div class="item"><div class="name">Bolivia</div></div>
+		<div class="item"><div class="name">Bosnia and Herzegovina</div></div>
+		<div class="item"><div class="name">Botswana</div></div>
+		<div class="item"><div class="name">Brazil</div></div>
+		<div class="item"><div class="name">Brunei</div></div>
+		<div class="item"><div class="name">Bulgaria</div></div>
+		<div class="item"><div class="name">Burkina Faso</div></div>
+		<div class="item"><div class="name">Burundi</div></div>
+		<div class="item"><div class="name">Cambodia</div></div>
+		<div class="item"><div class="name">Cameroon</div></div>
+		<div class="item"><div class="name">Canada</div></div>
+		<div class="item"><div class="name">Central African Republic</div></div>
+		<div class="item"><div class="name">Chad</div></div>
+		<div class="item"><div class="name">Chile</div></div>
+		<div class="item"><div class="name">China</div></div>
+		<div class="item"><div class="name">Colombia</div></div>
+		<div class="item"><div class="name">Costa Rica</div></div>
+		<div class="item"><div class="name">Croatia</div></div>
+		<div class="item"><div class="name">Cuba</div></div>
+		<div class="item"><div class="name">Cyprus</div></div>
+		<div class="item"><div class="name">Czech Republic</div></div>
+		<div class="item"><div class="name">Democratic Republic of the Congo</div></div>
+		<div class="item"><div class="name">Denmark</div></div>
+		<div class="item"><div class="name">Djibouti</div></div>
+		<div class="item"><div class="name">Dominican Republic</div></div>
+		<div class="item"><div class="name">East Timor</div></div>
+		<div class="item"><div class="name">Ecuador</div></div>
+		<div class="item"><div class="name">Egypt</div></div>
+		<div class="item"><div class="name">El Salvador</div></div>
+		<div class="item"><div class="name">England</div></div>
+		<div class="item"><div class="name">Equatorial Guinea</div></div>
+		<div class="item"><div class="name">Eritrea</div></div>
+		<div class="item"><div class="name">Estonia</div></div>
+		<div class="item"><div class="name">Ethiopia</div></div>
+		<div class="item"><div class="name">Falkland Islands</div></div>
+		<div class="item"><div class="name">Fiji</div></div>
+		<div class="item"><div class="name">Finland</div></div>
+		<div class="item"><div class="name">France</div></div>
+		<div class="item"><div class="name">French Southern and Antarctic Lands</div></div>
+		<div class="item"><div class="name">Gabon</div></div>
+		<div class="item"><div class="name">Gambia</div></div>
+		<div class="item"><div class="name">Georgia</div></div>
+		<div class="item"><div class="name">Germany</div></div>
+		<div class="item"><div class="name">Ghana</div></div>
+		<div class="item"><div class="name">Greece</div></div>
+		<div class="item"><div class="name">Greenland</div></div>
+		<div class="item"><div class="name">Guatemala</div></div>
+		<div class="item"><div class="name">Guinea</div></div>
+		<div class="item"><div class="name">Guinea Bissau</div></div>
+		<div class="item"><div class="name">Guyana</div></div>
+		<div class="item"><div class="name">Haiti</div></div>
+		<div class="item"><div class="name">Honduras</div></div>
+		<div class="item"><div class="name">Hungary</div></div>
+		<div class="item"><div class="name">Iceland</div></div>
+		<div class="item"><div class="name">India</div></div>
+		<div class="item"><div class="name">Indonesia</div></div>
+		<div class="item"><div class="name">Iran</div></div>
+		<div class="item"><div class="name">Iraq</div></div>
+		<div class="item"><div class="name">Ireland</div></div>
+		<div class="item"><div class="name">Israel</div></div>
+		<div class="item"><div class="name">Italy</div></div>
+		<div class="item"><div class="name">Ivory Coast</div></div>
+		<div class="item"><div class="name">Jamaica</div></div>
+		<div class="item"><div class="name">Japan</div></div>
+		<div class="item"><div class="name">Jordan</div></div>
+		<div class="item"><div class="name">Kazakhstan</div></div>
+		<div class="item"><div class="name">Kenya</div></div>
+		<div class="item"><div class="name">Kosovo</div></div>
+		<div class="item"><div class="name">Kuwait</div></div>
+		<div class="item"><div class="name">Kyrgyzstan</div></div>
+		<div class="item"><div class="name">Laos</div></div>
+		<div class="item"><div class="name">Latvia</div></div>
+		<div class="item"><div class="name">Lebanon</div></div>
+		<div class="item"><div class="name">Lesotho</div></div>
+		<div class="item"><div class="name">Liberia</div></div>
+		<div class="item"><div class="name">Libya</div></div>
+		<div class="item"><div class="name">Lithuania</div></div>
+		<div class="item"><div class="name">Luxembourg</div></div>
+		<div class="item"><div class="name">Macedonia</div></div>
+		<div class="item"><div class="name">Madagascar</div></div>
+		<div class="item"><div class="name">Malawi</div></div>
+		<div class="item"><div class="name">Malaysia</div></div>
+		<div class="item"><div class="name">Mali</div></div>
+		<div class="item"><div class="name">Mauritania</div></div>
+		<div class="item"><div class="name">Mexico</div></div>
+		<div class="item"><div class="name">Moldova</div></div>
+		<div class="item"><div class="name">Mongolia</div></div>
+		<div class="item"><div class="name">Montenegro</div></div>
+		<div class="item"><div class="name">Morocco</div></div>
+		<div class="item"><div class="name">Mozambique</div></div>
+		<div class="item"><div class="name">Myanmar</div></div>
+		<div class="item"><div class="name">Namibia</div></div>
+		<div class="item"><div class="name">Nepal</div></div>
+		<div class="item"><div class="name">Netherlands</div></div>
+		<div class="item"><div class="name">New Caledonia</div></div>
+		<div class="item"><div class="name">New Zealand</div></div>
+		<div class="item"><div class="name">Nicaragua</div></div>
+		<div class="item"><div class="name">Niger</div></div>
+		<div class="item"><div class="name">Nigeria</div></div>
+		<div class="item"><div class="name">North Korea</div></div>
+		<div class="item"><div class="name">Northern Cyprus</div></div>
+		<div class="item"><div class="name">Norway</div></div>
+		<div class="item"><div class="name">Oman</div></div>
+		<div class="item"><div class="name">Pakistan</div></div>
+		<div class="item"><div class="name">Panama</div></div>
+		<div class="item"><div class="name">Papua New Guinea</div></div>
+		<div class="item"><div class="name">Paraguay</div></div>
+		<div class="item"><div class="name">Peru</div></div>
+		<div class="item"><div class="name">Philippines</div></div>
+		<div class="item"><div class="name">Poland</div></div>
+		<div class="item"><div class="name">Portugal</div></div>
+		<div class="item"><div class="name">Puerto Rico</div></div>
+		<div class="item"><div class="name">Qatar</div></div>
+		<div class="item"><div class="name">Republic of Serbia</div></div>
+		<div class="item"><div class="name">Republic of the Congo</div></div>
+		<div class="item"><div class="name">Romania</div></div>
+		<div class="item"><div class="name">Russia</div></div>
+		<div class="item"><div class="name">Rwanda</div></div>
+		<div class="item"><div class="name">Saudi Arabia</div></div>
+		<div class="item"><div class="name">Senegal</div></div>
+		<div class="item"><div class="name">Sierra Leone</div></div>
+		<div class="item"><div class="name">Slovakia</div></div>
+		<div class="item"><div class="name">Slovenia</div></div>
+		<div class="item"><div class="name">Solomon Islands</div></div>
+		<div class="item"><div class="name">Somalia</div></div>
+		<div class="item"><div class="name">Somaliland</div></div>
+		<div class="item"><div class="name">South Africa</div></div>
+		<div class="item"><div class="name">South Korea</div><a href="https://www.maangchi.com/">https://www.maangchi.com/</a></div>
+		<div class="item"><div class="name">South Sudan</div></div>
+		<div class="item"><div class="name">Spain</div></div>
+		<div class="item"><div class="name">Sri Lanka</div></div>
+		<div class="item"><div class="name">Sudan</div></div>
+		<div class="item"><div class="name">Suriname</div></div>
+		<div class="item"><div class="name">Swaziland</div></div>
+		<div class="item"><div class="name">Sweden</div></div>
+		<div class="item"><div class="name">Switzerland</div></div>
+		<div class="item"><div class="name">Syria</div></div>
+		<div class="item"><div class="name">Taiwan</div></div>
+		<div class="item"><div class="name">Tajikistan</div></div>
+		<div class="item"><div class="name">Thailand</div></div>
+		<div class="item"><div class="name">The Bahamas</div></div>
+		<div class="item"><div class="name">Togo</div></div>
+		<div class="item"><div class="name">Trinidad and Tobago</div></div>
+		<div class="item"><div class="name">Tunisia</div></div>
+		<div class="item"><div class="name">Turkey</div></div>
+		<div class="item"><div class="name">Turkmenistan</div></div>
+		<div class="item"><div class="name">Uganda</div></div>
+		<div class="item"><div class="name">Ukraine</div></div>
+		<div class="item"><div class="name">United Arab Emirates</div></div>
+		<div class="item"><div class="name">United Republic of Tanzania</div></div>
+		<div class="item"><div class="name">Uruguay</div></div>
+		<div class="item"><div class="name">USA</div></div>
+		<div class="item"><div class="name">Uzbekistan</div></div>
+		<div class="item"><div class="name">Vanuatu</div></div>
+		<div class="item"><div class="name">Venezuela</div></div>
+		<div class="item"><div class="name">Vietnam</div></div>
+		<div class="item"><div class="name">West Bank</div></div>
+		<div class="item"><div class="name">Western Sahara</div></div>
+		<div class="item"><div class="name">Yemen</div></div>
+		<div class="item"><div class="name">Zambia</div></div>
+		<div class="item"><div class="name">Zimbabwe</div></div>
+	</div>
+	<script src="common_toggletheme.js"></script>
 </body>
-<script>
-	document
-.getElementById("theme-switcher-grid")
-.addEventListener("click", function () {
-this.classList.toggle("night-theme");
-if(this.classList.contains("night-theme"))
-{
-	document.body.style.backgroundColor = "var(--bg-color-dark)";
-}
-else
-{
-	document.body.style.backgroundColor = "var(--bg-color-light)";
-}
-});
-</script>
 </html>
