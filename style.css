@@ -11,9 +11,13 @@
 	  text-decoration: none;
 	  margin: 5px;
 	}
-	#nav > *:hover {
-	  box-shadow: 0 0 8px red;
-	  transition: all 0.2s ease-in-out;
+	#nav a:hover {
+	  background-color: rgba(255, 0, 0, 0.15);
+	  box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.3);
+	  border-radius: 4px;
+	}
+	#nav button:hover {
+	  box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.3);
 	}
 :root {
     --sun-color: #fabc1c;
