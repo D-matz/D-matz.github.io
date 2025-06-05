@@ -125,6 +125,16 @@ d3.json("/colored_world.json", function(data) {
     .attr("d", path)
     .attr("fill", d => `var(--country-${['one','two','three','four'][d.properties.color - 1]})`)
     .style("cursor", "pointer")
+	.on("click", function(d) {
+	if (pinnedCountry === d) {
+		// Clicking same country - unpin
+		hideTooltip();
+	} else {
+		// Pin new country
+		pinnedCountry = d;
+		showTooltip(d, d3.event);
+	}
+})
 .on("mouseover", d => { if (!pinnedCountry) showTooltip(d, d3.event); })
 .on("mouseout", () => { if (!pinnedCountry) hideTooltip(); })
 .on("mousemove", () => { if (!pinnedCountry) showTooltip(null, d3.event); });    
