@@ -1,24 +1,23 @@
 <!DOCTYPE html> 
 <html lang="en"> 
-  
 <head> 
-    <meta charset="UTF-8" /> 
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 	<title>Eat The World</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3e%3cdefs%3e%3clinearGradient%20id='blue-gradient'%20x1='0%25'%20y1='0%25'%20x2='100%25'%20y2='100%25'%3e%3cstop%20offset='0%25'%20stop-color='%23A6D7F0'/%3e%3cstop%20offset='100%25'%20stop-color='%23023E58'/%3e%3c/linearGradient%3e%3c/defs%3e%3ccircle%20cx='50'%20cy='50'%20r='50'%20fill='url(%23blue-gradient)'/%3e%3c/svg%3e" type="image/svg+xml" />
     <script src="https://d3js.org/d3.v4.js"></script> 
     <script src=
 "https://d3js.org/d3-geo-projection.v2.min.js">
     </script>
 	<link rel="stylesheet" href="style.css">
+	<script src="common_loadtheme.js"></script>
 </head>
-<body> 
-<div style="display: flex; flex-direction: column; min-height: 100vh;">
-  <div id="nav" style="display: flex; align-items: center; padding: 10px;">
+<body>
+  <div id="nav" style="display: flex; justify-content: center; align-items: center; padding: 10px;">
     <a title="globe" href="/globe.html">🌎</a>
     <a title="map" href="/map.html">🗺️</a>
     <a title="list" href="/list.html">📄</a>
-    <button
+    <button onclick="toggleTheme()"
       style="margin-left: 10px; height: 25px;"
       class="theme-switcher-grid"
       id="theme-switcher-grid"
@@ -42,8 +41,7 @@
   </div>
 </div>
 
-
-  	<script src="common.js"></script>
+	<script src="common_tooltip.js"></script>
     <script> 
 const aspectRatio = 1.68766789;
 let svg = d3.select("svg");
@@ -71,49 +69,44 @@ const zoom = d3.zoom()
     countriesGroup.attr("transform", d3.event.transform);
     svg.select("rect").attr("transform", d3.event.transform);
   });
-  
-svg.call(zoom);
 
 
 function updateScale() {
   const mapHeight = Math.min(window.innerHeight * 0.9, window.innerWidth * 0.9 / aspectRatio);
   const mapWidth = mapHeight * aspectRatio;
-
-  svg.attr("width", mapWidth)
-     .attr("height", mapHeight);
-
-  projection
-    .scale(mapHeight * 0.3)
-    .translate([mapWidth / 2, mapHeight / 2]);
-
-  path.projection(projection);
-
-  if (ocean && countriesGroup) {
-    // Update ocean rect bounds using current projection & features
-    d3.json("/colored_world.json", function(data) {
-      const [[x0, y0], [x1, y1]] = path.bounds({ type: "FeatureCollection", features: data.features });
-      const padX = (x1 - x0) * 0.01;
-
-      ocean
-        .attr("x", x0 - padX)
-        .attr("y", y0)
-        .attr("width", (x1 - x0) + padX * 2)
-        .attr("height", y1 - y0)
-        .attr("rx", (y1 - y0) / 2)
-        .attr("ry", (y1 - y0) / 2);
-
-      countriesGroup.selectAll("path")
-        .attr("d", path);
-    });
-  }
   
-  svg.call(zoom.transform, d3.zoomIdentity);
+  svg.attr("width", mapWidth).attr("height", mapHeight);
+  projection.scale(mapHeight * 0.3).translate([mapWidth / 2, mapHeight / 2]);
+  path.projection(projection);
+  
+  // Only update if elements exist
+  if (ocean && countriesGroup) {
+    // Use the existing data instead of reloading
+    const bounds = path.bounds({ 
+      type: "FeatureCollection", 
+      features: countriesGroup.selectAll("path").data() 
+    });
+    const [[x0, y0], [x1, y1]] = bounds;
+    const padX = (x1 - x0) * 0.01;
+    
+    ocean
+      .attr("x", x0 - padX)
+      .attr("y", y0)
+      .attr("width", (x1 - x0) + padX * 2)
+      .attr("height", y1 - y0)
+      .attr("rx", (y1 - y0) / 2)
+      .attr("ry", (y1 - y0) / 2);
+      
+    countriesGroup.selectAll("path").attr("d", path);
+  }
 }
 
 d3.json("/colored_world.json", function(data) {
-  const [[x0, y0], [x1, y1]] = path.bounds({ type: "FeatureCollection", features: data.features });
-  const padX = (x1 - x0) * 0.01;
-
+  // Calculate initial bounds
+  let [[x0, y0], [x1, y1]] = path.bounds({ type: "FeatureCollection", features: data.features });
+  let padX = (x1 - x0) * 0.01;
+  
+  // Create ocean background
   ocean = svg.insert("rect", ":first-child")
     .attr("x", x0 - padX)
     .attr("y", y0)
@@ -121,36 +114,27 @@ d3.json("/colored_world.json", function(data) {
     .attr("height", y1 - y0)
     .attr("rx", (y1 - y0) / 2)
     .attr("ry", (y1 - y0) / 2)
-    .attr("fill", "var(--ocean-color-light)")
+    .attr("fill", "var(--ocean-color)")
     .attr("style", "transition: fill 0.8s ease;");
-
+  
+  // Create countries
   countriesGroup = svg.append("g");
-
   countriesGroup.selectAll("path")
     .data(data.features)
     .enter().append("path")
     .attr("d", path)
     .attr("fill", d => `var(--country-${['one','two','three','four'][d.properties.color - 1]})`)
     .style("cursor", "pointer")
-    .on("click", function(d) {
-      if (pinnedCountry === d) hideTooltip();
-      else { pinnedCountry = d; showTooltip(d, d3.event); }
-    })
-    .on("mouseover", function(d) {
-      if (!pinnedCountry) showTooltip(d, d3.event);
-    })
-    .on("mouseout", function() {
-      if (!pinnedCountry) hideTooltip();
-    })
-    .on("mousemove", function() {
-      if (!pinnedCountry) showTooltip(null, d3.event);
-    });	
+    // ... your event handlers
+    
   svg.call(zoom);
-  updateScale();               // initial sizing
-  window.addEventListener("resize", updateScale);
+  updateScale();
+	window.addEventListener("resize", updateScale);
 });
 
     </script> 
+		<script src="common_toggletheme.js"></script>
+
 </body>
   
 </html>

@@ -27,25 +27,12 @@ function hideTooltip(){
 hideTooltip();
 
 
-	document
-.getElementById("theme-switcher-grid")
-.addEventListener("click", function () {
-this.classList.toggle("night-theme");
-if(this.classList.contains("night-theme"))
+if(typeof svg !== 'undefined')
 {
-	document.body.style.backgroundColor = "var(--bg-color-dark)";
-	ocean.attr("fill", "var(--ocean-color-dark)");
+	document.addEventListener("click", function (event) {
+	  const isInsideSVG = svg.node().contains(event.target);
+	  if (!isInsideSVG) {
+		hideTooltip();
+	  }
+	});
 }
-else
-{
-	document.body.style.backgroundColor = "var(--bg-color-light)";
-	ocean.attr("fill", "var(--ocean-color-light)");
-}
-});
-
-document.addEventListener("click", function (event) {
-  const isInsideSVG = svg.node().contains(event.target);
-  if (!isInsideSVG) {
-	hideTooltip();
-  }
-});
