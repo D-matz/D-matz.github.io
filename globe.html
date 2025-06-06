@@ -14,9 +14,13 @@
 </head>
 <body>
   <div id="nav" style="display: flex; justify-content: center; align-items: center; padding: 10px;">
-    <a title="globe" href="/globe.html">🌎</a>
-    <a title="map" href="/map.html">🗺️</a>
-    <a title="list" href="/list.html">📄</a>
+    <a title="globe (3D)" href="/globe.html">🌎</a>
+    <a title="map (2D)" href="/map.html">🗺️</a>
+    <a title="list (uh...it's a list)" href="/list.html">📄</a>
+	
+	<input list="countries" type="text" id="searchCountry" placeholder="🔍">
+	<datalist id="countries"> <option value="South Korea"> <option value="Cambodia"> <option value="Kosovo"> </datalist>
+	
     <button onclick="toggleTheme()"
       style="margin-left: 10px; height: 25px;"
       class="theme-switcher-grid"
@@ -40,7 +44,7 @@
     <svg style="width: min(90vh, 90vw); height: min(90vh, 90vw);">
     </svg>
   </div>
-</div>
+
 	<script src="common_tooltip.js"></script>
     <script> 
 		const size = Math.min(window.innerHeight * 0.9, window.innerWidth * 0.9);
@@ -100,14 +104,11 @@
 					.selectAll("path") 
 					.data(data.features) 
 					.enter().append("path")
-					.style("cursor", "pointer")
-					.attr("fill", d => {
-					  const c = d.properties.color;
-					  return `var(--country-${['one','two','three','four'][c-1]})`;
-					})
 					.attr("d", d3.geoPath() 
 						.projection(projection) 
 					)
+					.attr("fill", d => `var(--country-${['one','two','three','four'][d.properties.color - 1]})`)
+					.style("cursor", "pointer")
 					.on("click", function(d) {
 						if (pinnedCountry === d) {
 							// Clicking same country - unpin
