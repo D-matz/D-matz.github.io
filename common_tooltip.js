@@ -45,8 +45,8 @@ tooltip.style("left", leftPos).style("top", topPos);
 		const site = d.properties.site ? d.properties.site : "https://example.com";
         tooltip.style("visibility", "visible")
 			.style("left", "16.5%")
-			.style("top", "60px")
-			.html(`<iframe src="${site}" height="${window.innerHeight * 0.666666666666666}" width="${window.innerWidth * 0.67}" style="border:none;"></iframe>`)     
+			.style("top", "10%")
+			.html(`<iframe src="${site}" height="${window.innerHeight * 2 / 3}" width="${window.innerWidth * 2 / 3}" style="border:none;"></iframe>`)     
     }
 }
 
