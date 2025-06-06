@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-<script>fetch('/globe.html').then(r=>r.text()).then(h=>document.write(h))</script>
-<html lang="en"> 
 <head> 
 	<title>Eat The World</title>
     <meta charset="UTF-8">
@@ -18,6 +16,9 @@
 		}
     </style>
 </head>
+<script>fetch('/globe.html').then(r=>r.text()).then(h=>document.write(h))</script>
+<noscript>
+<html lang="en"> 
 <body>
 <h3 style="text-align: center">Enable javascript for globe and map (but we can just text if you want)</h3>
     <div style="padding: 4px; display: flex; flex-wrap: wrap; justify-content: center; gap: 2px;">
@@ -201,3 +202,4 @@
 	</div>
 </body>
 </html>
+</noscript>
