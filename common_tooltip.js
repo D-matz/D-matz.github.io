@@ -28,12 +28,12 @@ const tooltipWidth = window.innerWidth * 0.45;
 const tooltipHeight = window.innerHeight * 0.45;
 
 const leftPos = evt.clientX > window.innerWidth * 0.5 
-    ? (evt.clientX - tooltipWidth - 1) + "px"
-    : (evt.clientX + 1) + "px";
+    ? (evt.clientX - tooltipWidth - 10) + "px"
+    : (evt.clientX + 10) + "px";
 
 const topPos = evt.clientY > window.innerHeight * 0.5
-    ? (evt.clientY - tooltipHeight - 1) + "px" 
-    : (evt.clientY + 1) + "px";
+    ? (evt.clientY - tooltipHeight - 10) + "px" 
+    : (evt.clientY + 10) + "px";
 
 tooltip.style("left", leftPos).style("top", topPos);
 
