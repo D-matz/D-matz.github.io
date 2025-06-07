@@ -61,6 +61,10 @@ document.addEventListener('click', function(event) {
   hideTooltip();
 });
 
+document.addEventListener('keydown', function(event) {
+  hideTooltip();
+});
+
 
 let worldData = null;
 let countryDict = {};
